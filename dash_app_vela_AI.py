@@ -23,10 +23,20 @@ def get_direction(postcode):
     postcode_dir = postcode_data[ postcode_data['postcode'] == postcode ].values[0]
     return '{},{}'.format(postcode_dir[2],postcode_dir[3])
 
+# postcode_dir = postcode_data[ postcode_data['postcode'] == "W5 3NH" ].values[0]
+# print( '{},{}'.format(postcode_dir[2],postcode_dir[3]) )
+
 
 ##########
 ##########
 ##########
+
+# as per https://forum.switchdoc.com/thread/1698/dash-app-standard-error-message
+# 200 level errors are not really errors but informational. 400 & 500 level are bad
+import logging
+
+logging.getLogger('werkzeug').setLevel(logging.ERROR)
+
 
 app = dash.Dash()   #initialising dash app
 
@@ -38,6 +48,12 @@ app.layout = html.Div(
     html.Br(),
     html.Br(),
 
+    #----
+    #
+    # origin postcode
+    #
+    #----
+
     html.Div(
         [
         html.Label('Input your origin postcode here:'),
@@ -45,6 +61,7 @@ app.layout = html.Div(
         dcc.Input(
             id = 'orig-postcode-input',
             placeholder = 'example postcode: N1 1SY',
+            debounce = True, #  If True, changes to input will be sent back to the Dash server only on enter or when losing focus. If it's False, it will sent the value back on every change. IMPORTANT: debounce=True will trigger on <enter>
             type = 'text',
             value = ''
         )
@@ -54,30 +71,9 @@ app.layout = html.Div(
 
     html.Br(),
     html.Div(id='orig-postcode-output')
-    # ,
-    
-    # dcc.Store(id='orig-lat-long-output')
-    # ,
 
-    # html.Br(),
-    # html.Div(id='orig-lat-long-output')
 
 ]) # , className="container"
-
-#----
-#
-# Getting postcode in the app
-#
-#-----
-# @app.callback(
-#     # getting a postcode and outputting it: it will be printed in the app
-#     Output(component_id='orig-postcode-output', component_property='children'),
-#     [Input(component_id='orig-postcode-input', component_property='value')]
-# )
-# def update_output_div(input_value):
-#     my_orig_postcode = input_value
-#     return f'Output: {input_value}'
-
 
 #----
 #
@@ -91,37 +87,22 @@ app.layout = html.Div(
 )
 def update_output_div(input_value):
     
-    # my_orig_postcode = input_value
-
-    # printing the postcode
+    # printing the postcode in the TERMINAL
     print(input_value)
 
     postcode_dir = postcode_data[ postcode_data['postcode'] == input_value ].values[0]
+
+    # print latitude longitude in the TERMINAL
+    print('{},{}'.format(postcode_dir[2],postcode_dir[3]) )
+
     return '{},{}'.format(postcode_dir[2],postcode_dir[3])
 
-    # return f'Output: {input_value}'
 
-
-# geting lat, lon from postcode
-# @app.callback(
-#     # getting a postcode and outputting its lat,lon: it will be printed in the app
-#     Output(component_id='orig-lat-long-output', component_property='children'),
-#     [Input(component_id='orig-postcode-output', component_property='value')]
-# )
-# def get_direction(input_value):
-#     """
-#     given a postcode, this function outputs the latitude and longitude
-#     """
-#     # printing the postcode
-#     print(input_value)
-
-#     postcode_dir = postcode_data[ postcode_data['postcode'] == input_value ].values[0]
-#     return '{},{}'.format(postcode_dir[2],postcode_dir[3])
-
-
-# get_direction(my_orig_postcode)
-
-
+#---
+#
+# running app
+#
+#----
 
 if __name__ == '__main__': 
 
@@ -130,4 +111,4 @@ if __name__ == '__main__':
     # visit http://127.0.0.exi1:8050/ 
     # if running from here: Press CTRL+C to quit
     # change parameter port if needed
-    app.run_server(port = 30006)
+    app.run_server(port = 30072)
