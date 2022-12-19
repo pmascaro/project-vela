@@ -64,16 +64,47 @@ app.layout = html.Div(
 
 ]) # , className="container"
 
+#----
+#
+# Getting postcode in the app
+#
+#-----
+# @app.callback(
+#     # getting a postcode and outputting it: it will be printed in the app
+#     Output(component_id='orig-postcode-output', component_property='children'),
+#     [Input(component_id='orig-postcode-input', component_property='value')]
+# )
+# def update_output_div(input_value):
+#     my_orig_postcode = input_value
+#     return f'Output: {input_value}'
+
+
+#----
+#
+# Getting lat,lon in the app
+#
+#-----
 @app.callback(
+    # getting a postcode and outputting its lat,lon: it will be printed in the app
     Output(component_id='orig-postcode-output', component_property='children'),
     [Input(component_id='orig-postcode-input', component_property='value')]
 )
 def update_output_div(input_value):
-    my_orig_postcode = input_value
-    return f'Output: {input_value}'
+    
+    # my_orig_postcode = input_value
+
+    # printing the postcode
+    print(input_value)
+
+    postcode_dir = postcode_data[ postcode_data['postcode'] == input_value ].values[0]
+    return '{},{}'.format(postcode_dir[2],postcode_dir[3])
+
+    # return f'Output: {input_value}'
+
 
 # geting lat, lon from postcode
 # @app.callback(
+#     # getting a postcode and outputting its lat,lon: it will be printed in the app
 #     Output(component_id='orig-lat-long-output', component_property='children'),
 #     [Input(component_id='orig-postcode-output', component_property='value')]
 # )
@@ -81,6 +112,9 @@ def update_output_div(input_value):
 #     """
 #     given a postcode, this function outputs the latitude and longitude
 #     """
+#     # printing the postcode
+#     print(input_value)
+
 #     postcode_dir = postcode_data[ postcode_data['postcode'] == input_value ].values[0]
 #     return '{},{}'.format(postcode_dir[2],postcode_dir[3])
 
@@ -96,4 +130,4 @@ if __name__ == '__main__':
     # visit http://127.0.0.exi1:8050/ 
     # if running from here: Press CTRL+C to quit
     # change parameter port if needed
-    app.run_server(port = 30052)
+    app.run_server(port = 30006)
