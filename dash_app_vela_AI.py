@@ -83,8 +83,7 @@ app.layout = html.Div(
 @app.callback(
     # getting a postcode and outputting its lat,lon: it will be printed in the app
     Output(component_id='orig-postcode-output', component_property='children'),
-    [Input(component_id='orig-postcode-input', component_property='value')]
-)
+    [Input(component_id='orig-postcode-input', component_property='value')],prevent_initial_call=True)
 def update_output_div(input_value):
     
     # printing the postcode in the TERMINAL
@@ -111,4 +110,4 @@ if __name__ == '__main__':
     # visit http://127.0.0.exi1:8050/ 
     # if running from here: Press CTRL+C to quit
     # change parameter port if needed
-    app.run_server(port = 30072)
+    app.run_server(port = 30074)
