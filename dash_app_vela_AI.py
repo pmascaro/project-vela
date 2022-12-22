@@ -3,6 +3,7 @@ from dash import html, dcc, Input, Output
 import plotly.graph_objects as go
 import plotly.express as px
 import pandas as pd
+import os
 
 # importing the requests library
 import requests
@@ -62,13 +63,6 @@ for postcode in list_airports_postcode:
     # print(postcode)
     list_postcode_latlon.append( get_direction(postcode) )
 
-# testing
-
-# list_text_info = []
-# list_text_info.append( f"Your departure time from origin is: and your arrival time to destination is:" )
-
-
-
 ##########
 ##########
 ##########
@@ -78,7 +72,6 @@ for postcode in list_airports_postcode:
 # import logging
 
 # logging.getLogger('werkzeug').setLevel(logging.ERROR)
-
 
 app = dash.Dash()   #initialising dash app
 
@@ -110,34 +103,6 @@ app.layout = html.Div(
     ]
     ),
 
-    #----
-    #
-    # dest postcode
-    #
-    #----
-
-    # html.Div(
-    #     [
-    #     html.Label('Input your dest postcode here:'),
-
-    #     dcc.Input(
-    #         id = 'dest-postcode-input',
-    #         placeholder = 'example postcode: N1 1SY',
-    #         debounce = True, #  If True, changes to input will be sent back to the Dash server only on enter or when losing focus. If it's False, it will sent the value back on every change. IMPORTANT: debounce=True will trigger on <enter>
-    #         type = 'text',
-    #         value = ''
-    #     )
-    # ]
-    # ),
-
-    # print origin lat,lon
-    # html.Br(),
-    # html.Div(id='orig-postcode-output'),
-
-    # print dest lat lon
-    # html.Br(),
-    # html.Div(id='dest-postcode-output')
-
     # print LHR info message
     html.Br(),
     html.Div(id='lhr-information-output'),
@@ -164,13 +129,6 @@ app.layout = html.Div(
 
 ]) # , className="container"
 
-#----
-#
-# Getting lat,lon in the app
-#
-#-----
-
-
 @app.callback(
     
     [Output(component_id='lhr-information-output', component_property='children'),
@@ -185,27 +143,9 @@ app.layout = html.Div(
     prevent_initial_call=True)
 def update_output_div(input_orig_postcode):
     
-    # if len(input_dest_postcode) != 0:
-    
-    # print(len(input_orig_postcode))
-    # print(len(input_dest_postcode))
-
-    # else:
     # printing the postcode in the TERMINAL
     print(f"orig postcode is: {input_orig_postcode}")
     # print(f"dest postcode is: {input_dest_postcode}")
-
-    # getting postcode information (including lat, lon) for origin
-    # postcode_dir_origin = postcode_data[ postcode_data['postcode'] == input_orig_postcode ].values[0]
-
-    # getting postcode information for dest
-    # postcode_dir_dest = [] # initialise empty list
-    # for postcode in list_airports_postcode:
-        # postcode_dir_dest.append( aux_postcode ) # append list 
-
-    # print latitude longitude from origin in the TERMINAL
-    # print('origin postcode lat, lon: {},{}'.format(postcode_dir_origin[2],postcode_dir_origin[3]) )
-    # print('origin postcode lat, lon: {},{}'.format(postcode_dir_dest[2],postcode_dir_dest[3]) )
 
     # 1) Accessing HERE url
     # 2) Requesting a location with two postcodes
@@ -256,19 +196,10 @@ def update_output_div(input_orig_postcode):
         print( f"Your departure time from origin is: {dep_datetime.time()} and your arrival time to destination to the airport is: {arr_datetime.time()}" )
         print(f"Time to destination: {diff} \n")
 
-        list_text_info.append( f"Your departure time from origin is: {dep_datetime.time()} and your arrival time to {airport_cd} is: {arr_datetime.time()}. Time to destination: {diff}" )
-
-        # return f"Your departure time from origin is: {dep_datetime.time()} and your arrival time to destination is: {arr_datetime.time()}. \n Time to destination: {diff}"
-
-    # else:
-        # return dash.no_update, dash.no_update
-    
-    #,  'Output: {}'.format(input_orig_postcode)
-
-    #return 'origin postcode lat, lon: {},{}'.format(postcode_dir_origin[2],postcode_dir_origin[3]), 'dest postcode lat, lon: {},{}'.format(postcode_dir_dest[2],postcode_dir_dest[3]) 
+        # TODO - Add new line to the information box, to show more info about costumer's journey
+        list_text_info.append( f"Your departure time from origin is: {dep_datetime.time()} and your arrival time to {airport_cd} is: {arr_datetime.time()}.{os.linesep} Time to destination: {diff}" )
 
     return list_text_info[0], list_text_info[1], list_text_info[2], list_text_info[3], list_text_info[4], list_text_info[5]
-    # return f"Your departure time from origin is: {dep_datetime.time()} and your arrival time to destination is: {arr_datetime.time()}. \n Time to destination: {diff}"
 
 #---
 #
