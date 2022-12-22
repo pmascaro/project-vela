@@ -28,3 +28,11 @@ To deactivate it, simply type: deactivate
 Note: To check for interpreter, use 'python'
 
 Now it's time to install all your required libraries, which you can do as you require them. Also, you can check (here)[https://towardsdatascience.com/how-to-use-bash-to-automate-the-boring-stuff-for-data-science-d447cd23fffe] if you want to install them in one go
+
+At the end of the process, use this in the terminal:
+
+pip freeze > requirements.txt
+
+You can always create another virtual environment, you can always copy all the requirements from the requirements.txt file:
+
+pip install -r requirements.txt
