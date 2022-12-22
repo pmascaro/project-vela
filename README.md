@@ -15,7 +15,7 @@ https://www.youtube.com/watch?v=brJR5Qjp4SM
 
 and https://bobbyhadz.com/blog/source-is-not-recognized-as-internal-or-external-command
 
-In the terminal, use: python -m venv venv
+To create virtual environment, use 'python -m venv venv' in the terminal, where 'venv' is the name of the virtual environment. 
 
 This creates the virtual environment and now we need to activate it. To do so, use:
 
