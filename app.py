@@ -44,14 +44,14 @@ def get_direction(postcode):
 # getting postcode information for each of the airports
 #----
 lhr_postcode = "TW6 2GA"
-# lcy_postcode = "E16 2PX"
-# lgw_postcode = "RH6 0NP"
-# ltn_postcode = "LU2 9QT"
-# stn_postcode = "CM24 1RW"
-# sen_postcode = "SS2 6YF"
+lcy_postcode = "E16 2PX"
+lgw_postcode = "RH6 0NP"
+ltn_postcode = "LU2 9QT"
+stn_postcode = "CM24 1RW"
+sen_postcode = "SS2 6YF"
 
-list_airports_code = ['LHR'] #  ,'LCY','LGW','LTN','STN','SEN'
-list_airports_postcode = [lhr_postcode] # ,lcy_postcode,lgw_postcode,ltn_postcode,stn_postcode,sen_postcode
+list_airports_code = ['LHR','LCY','LGW','LTN','STN','SEN'] #  
+list_airports_postcode = [lhr_postcode,lcy_postcode,lgw_postcode,ltn_postcode,stn_postcode,sen_postcode] # 
 
 # initialise empty list
 list_postcode_latlon = [] 
@@ -159,35 +159,42 @@ def test():
     origin=get_direction("N1 1SY")
 
     # focusing in getting information from one origin to LHR - TODO: loop through all airports
-    destination_latlon = list_postcode_latlon[0] # LHR only
+    # destination_latlon = list_postcode_latlon[0] # LHR only
 
-    my_query = {
-                    'origin':origin,
-                    'destination':destination_latlon
-                }
-            
-    # request a response
-    response =requests.get(url=my_url, headers=my_headers, params=my_query) 
+    # initialise an empty list where we will save each of the information texts
+    list_text_info = []
 
-    # Use the json module to load CKAN's (Comprehensive Knowledge Archive Network) response into a dictionary.
-    data = response.json()
+    # loop through each destination
+    for destination_latlon, airport_cd in zip(list_postcode_latlon, list_airports_code):
+    
 
-    # getting journey information and time to destination
-    # dep_time =  data['routes'][0]['sections'][0]['departure']['time']
-    dep_time = datetime.now().strftime("%Y-%m-%dT%H:%M:%SZ")
-    arr_time = data['routes'][0]['sections'][len(data['routes'][0]['sections'])-1]['arrival']['time']
+        my_query = {
+                        'origin':origin,
+                        'destination':destination_latlon
+                    }
+                
+        # request a response
+        response =requests.get(url=my_url, headers=my_headers, params=my_query) 
 
-    dep_datetime = datetime.strptime(dep_time, '%Y-%m-%dT%H:%M:%SZ')
-    arr_datetime = datetime.strptime(arr_time, '%Y-%m-%dT%H:%M:%SZ')
+        # Use the json module to load CKAN's (Comprehensive Knowledge Archive Network) response into a dictionary.
+        data = response.json()
 
-    diff = arr_datetime - dep_datetime 
+        # getting journey information and time to destination
+        # dep_time =  data['routes'][0]['sections'][0]['departure']['time']
+        dep_time = datetime.now().strftime("%Y-%m-%dT%H:%M:%SZ")
+        arr_time = data['routes'][0]['sections'][len(data['routes'][0]['sections'])-1]['arrival']['time']
 
-    print( f"Your departure time from origin is: {dep_datetime.time()} and your arrival time to destination to the airport is: {arr_datetime.time()}" )
-    print(f"Time to destination: {diff} \n")
+        dep_datetime = datetime.strptime(dep_time, '%Y-%m-%dT%H:%M:%SZ')
+        arr_datetime = datetime.strptime(arr_time, '%Y-%m-%dT%H:%M:%SZ')
 
-    text = f"Your departure time from origin is: {dep_datetime.time()} and your arrival time to {list_airports_code[0]} is: {arr_datetime.time()}.{os.linesep} Time to destination: {diff}"
+        diff = arr_datetime - dep_datetime 
 
-    return render_template('index.html', text = text)
+        print( f"Your departure time from origin is: {dep_datetime.time()} and your arrival time to destination to the airport is: {arr_datetime.time()}" ) 
+        print(f"Time to destination: {diff} \n")
+
+        list_text_info.append( f"Your departure time from origin is: {dep_datetime.time()} and your arrival time to {airport_cd} is: {arr_datetime.time()}.{os.linesep} Time to destination: {diff}")
+
+    return render_template('index.html', list_text_info = list_text_info)
 
 #----
 #

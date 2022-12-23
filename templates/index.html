@@ -16,8 +16,10 @@
         My first website with <strong>Bulma</strong>!
       </p>
       <!--flask uses the Jinja two engine, which uses double curly bracket to place data from our app.py to the html file-->
-    {{text}}
-
+    <!-- list_text_info -->
+    {% for list_element in list_text_info %}
+    <p>{{ list_element }} </p>
+    {% endfor %}
     </div>
   </section>
   </body>
