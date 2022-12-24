@@ -3,7 +3,7 @@
 # flask has its own built test server, we'll use it to see what we are doing
 # to do that in the terminal we use:
 #
-# set FLASK_DEBUG=1
+# set FLAS_DEBUG=1
 # flask run
 # http://127.0.0.1:5000/
 #
@@ -24,6 +24,21 @@ import json # json it will come in handy when parsing the JSON output of an API
 import pandas as pd
 import os
 from datetime import datetime
+
+#-----
+#
+# References
+#
+#-----
+# st.title('Vela AI: Data-driven journeys harnessed by AI')
+# reference: https://dash.plotly.com/layout
+# https://dash.plotly.com/dash-core-components/store
+
+# input boxes: https://www.youtube.com/watch?v=VZ6IdRMc0RI
+# outputs with many inputs: https://dash.plotly.com/basic-callbacks
+
+# flask app (text preprocessing):https://realpython.com/flask-by-example-part-3-text-processing-with-requests-beautifulsoup-nltk/
+
 
 #-----
 #
@@ -77,7 +92,8 @@ for postcode in list_airports_postcode:
 # my_url = "https://transit.router.hereapi.com/v8/routes"
 
 # # HERE token
-# token = "eyJhbGciOiJSUzUxMiIsImN0eSI6IkpXVCIsImlzcyI6IkhFUkUiLCJhaWQiOiJlMWVaQXRheTZaZFdBdU9vZmt1RSIsImlhdCI6MTY3MTcyNzYxOSwiZXhwIjoxNjcxODE0MDE5LCJraWQiOiJqMSJ9.ZXlKaGJHY2lPaUprYVhJaUxDSmxibU1pT2lKQk1qVTJRMEpETFVoVE5URXlJbjAuLkF2bkg2MGFmdVZJRzlDOTlRMEtmVncuUlNsRjVCMHdVMEtfbG9lWERLTmNadGxBb3NOTHZSUnhyNXIzX0MweTVTbHNucjlKU1U0ckhRTTN6bWV6TlJVcm5ETmRXdlg0WXB6NElpRlluSV9YSmhicGo3bWNfOFZUTkdRUV9zYXZnQXUzRkVna1VoOGNBMmJfS09TdU5OcURUT1F2aTRFTGpLUFJENWs2LUVGM29DZ1F5ZTgxVm5TVXd3YzItNU0yZVdzLjJaTDhRYy1WYkZTM0J5SGVfUVRnXy1qTTFVTVBxUUNDb0FDV1EzdEhpSFU.k066p2aSBrnP7HXBiL6vSnaYkMxXbwBELuu1ME6WMr1GT_RvefiWSnmSotimn1Twm4mf9JGRi7xswfojXtDFQGhbcYAbWmlGGoutGMlyO3ChRaAD-nH90em3Eh2MwrBVaML5Z76pjVK75DiI0BlHdJIg0m6oeYX1sj5V_itZ7gFU-NsuqbuKULZv9ygH3g3Fzp2TSMYZIs2_DjyZ4WgkHnbCPQFQUYkQgLpBKLjEaYKbxGt8a0ftYE9QHy2ebyy5Xt-8NHTXFBFQBviMc8P28pewLj1ubfueZ5h0G9tDvXwde-GkKp6GDfqDMA_9W2csxuiiGauNiP5cW9OrZ7lTkw"
+# token = "eyJhbGciOiJSUzUxMiIsImN0eSI6IkpXVCIsImlzcyI6IkhFUkUiLCJhaWQiOiJlMWVaQXRheTZaZFdBdU9vZmt1RSIsImlhdCI6MTY3MTgzODc0NiwiZXhwIjoxNjcxOTI1MTQ2LCJraWQiOiJqMSJ9.ZXlKaGJHY2lPaUprYVhJaUxDSmxibU1pT2lKQk1qVTJRMEpETFVoVE5URXlJbjAuLlpCVTluMGh5ai1hYjU1Q2YwSlU2bkEuYWtuMUFYaU1SMlhTMVBvaFRDcHkxRnVsNHNTNFA5aGJOcHNUUkQ5aTFOMG9GMUxzd3pCNXlhNHBISHVtNWlsbzJTdnllOUtQNi05QXZrTDlhUzhWQ3BFWE9ZeGVtNzhtaTNTbm5RRWNna0FmdzllSWJqcWVVZ183NkNYdW9USUxyaWY2azVIN2swY1JhcU1hYncyV01YaGhvNWRJUXZjd3ZrdzNmRUlfUWdnLlNnczZaM1lQTHBZdnBSQkd6dkxGNVN3TFQ5RS1yN2EzUjEwQnBXRDZSbTg.EBNNd5LudRq9IAS6COxYfIjYRCq5fWXUXx3Yp85CAu1hXF1032VS53xaTDm1CaJLyq8p_u7iR9vk0-fPTzKJ0oemx_wYX1SnXOuVJj_SqkqQdT7BTTyzjQ7ufo14im8YI-o5EnXwSmXiK1JQUOGroDc8Qyu_l3PNwTScTVeayij_QFCW8gT_wGWOmj35vZm_h2A5MyB6ICI-Is0-g4h6hS3DgFYK1LWwnOOBUb5KGGbj4VGFawc2neuWIZgllDVnEF-PKgTZN0zNPHl-9b-H7m_PaijcYpUQqA9frnkfqwCt_qeOAWwQIR1Bfa1-d96tEp5fFMAyC1nPNt56MRBr5g"
+
 # # headers parameter
 # my_headers = {'Authorization' : 'Bearer '+token }
 
@@ -126,19 +142,6 @@ app = Flask(__name__) #
 
 @app.route("/")
 def test():
-
-    # get postcode direction
-    # print("\n")
-    # print(get_direction(lhr_postcode))
-    # print(get_direction(lcy_postcode))
-    # print("\n")
-
-    # airports_info = {
-    #     'airport_cd' : list_airports_code,
-    #     'airport_postcode' : list_airports_postcode
-    # }
-    # print(f"{airports_info} \n")
-
     ####
     # Accessing HERE API
     ####
@@ -151,15 +154,15 @@ def test():
     my_url = "https://transit.router.hereapi.com/v8/routes"
 
     # HERE token
-    token = "eyJhbGciOiJSUzUxMiIsImN0eSI6IkpXVCIsImlzcyI6IkhFUkUiLCJhaWQiOiJlMWVaQXRheTZaZFdBdU9vZmt1RSIsImlhdCI6MTY3MTcyNzYxOSwiZXhwIjoxNjcxODE0MDE5LCJraWQiOiJqMSJ9.ZXlKaGJHY2lPaUprYVhJaUxDSmxibU1pT2lKQk1qVTJRMEpETFVoVE5URXlJbjAuLkF2bkg2MGFmdVZJRzlDOTlRMEtmVncuUlNsRjVCMHdVMEtfbG9lWERLTmNadGxBb3NOTHZSUnhyNXIzX0MweTVTbHNucjlKU1U0ckhRTTN6bWV6TlJVcm5ETmRXdlg0WXB6NElpRlluSV9YSmhicGo3bWNfOFZUTkdRUV9zYXZnQXUzRkVna1VoOGNBMmJfS09TdU5OcURUT1F2aTRFTGpLUFJENWs2LUVGM29DZ1F5ZTgxVm5TVXd3YzItNU0yZVdzLjJaTDhRYy1WYkZTM0J5SGVfUVRnXy1qTTFVTVBxUUNDb0FDV1EzdEhpSFU.k066p2aSBrnP7HXBiL6vSnaYkMxXbwBELuu1ME6WMr1GT_RvefiWSnmSotimn1Twm4mf9JGRi7xswfojXtDFQGhbcYAbWmlGGoutGMlyO3ChRaAD-nH90em3Eh2MwrBVaML5Z76pjVK75DiI0BlHdJIg0m6oeYX1sj5V_itZ7gFU-NsuqbuKULZv9ygH3g3Fzp2TSMYZIs2_DjyZ4WgkHnbCPQFQUYkQgLpBKLjEaYKbxGt8a0ftYE9QHy2ebyy5Xt-8NHTXFBFQBviMc8P28pewLj1ubfueZ5h0G9tDvXwde-GkKp6GDfqDMA_9W2csxuiiGauNiP5cW9OrZ7lTkw"
+    token = "eyJhbGciOiJSUzUxMiIsImN0eSI6IkpXVCIsImlzcyI6IkhFUkUiLCJhaWQiOiJlMWVaQXRheTZaZFdBdU9vZmt1RSIsImlhdCI6MTY3MTgzODQ1MywiZXhwIjoxNjcxOTI0ODUzLCJraWQiOiJqMSJ9.ZXlKaGJHY2lPaUprYVhJaUxDSmxibU1pT2lKQk1qVTJRMEpETFVoVE5URXlJbjAuLk54WEJPU1lOcGdnRWZCZ09PcFMzZmcuWXVVR1BCSkhiUXFYNjBVcDdhQ1FVREVLM2dhX3dyOGRzTm5TV3kwZnFwMGlTZHFWRjBjT3Y2YWpScGZsTGMweXpRQkVPRllmaXJtSEZudUs4VWJhMXJKbV9lUXhvS2ExRGQxTkU0MXBBTlAxeUFFZUY4Tm1lOWlLV0NEWGtIdU9YQ0JJRHBhNVV6Y1ExQV8yZUVhWDhLUzhvVWpTM0E0ajF5M3FwcFFBb1hFLl9YOTJ1eHJfSk1jUGtUYUtPelNoZGpXSXJXUFF2OW8weXFLRFotOVpMYU0.V7JwYSR_tqJ2iFoQPU31X9QsgA-71-QTjYl0Mq7UOAFPYpvBPoLebIuPEO5zWi5D1w6odS8au6O59DYyLDsgdWvsGxDxZdfw1urMsUjug8f_RK8-EJfBTSP0V3kvdjtPqrr7dYUEvDi3GQKbGnB_HdPs-AScuJMCWGiOPaCTt1CIs59SDp5IgQdjppAl34a7KdI6hbrFEcpRmWmAENu-PjdDRua3FLEz0reK1wkEZWUX7GvFA8vn8e4B2spkBdyWtBHnRYPAhbtBTdyOFJ1ErREaGxfoI0buaw7AgdUXJ-UI3vCcOrWluLnXLbmgHo38MSNKquqXOk91F2CntNdhwQ"
+
     # headers parameter
     my_headers = {'Authorization' : 'Bearer '+token }
 
-    # requesting a location - user input
+    # requesting a location - user input. 
+    # TODO use flask app (text preprocessing):https://realpython.com/flask-by-example-part-3-text-processing-with-requests-beautifulsoup-nltk/ 
+    # and https://www.youtube.com/watch?v=9MHYHgh4jYc to get user input
     origin=get_direction("N1 1SY")
-
-    # focusing in getting information from one origin to LHR - TODO: loop through all airports
-    # destination_latlon = list_postcode_latlon[0] # LHR only
 
     # initialise an empty list where we will save each of the information texts
     list_text_info = []
@@ -207,4 +210,4 @@ def test():
 #     # visit http://127.0.0.exi1:8050/ 
 #     # if running from here: Press CTRL+C to quit
 #     # change parameter port if needed
-#     app.run()
+#     app.run(debug=True)
