@@ -17,11 +17,35 @@
         Enjoy the ride!
       </p>
       <form role="form", method='POST', action="/">
+        <!-- <label for="postcode">Fill form below with your origin postcode, orgin and destination cities </label> -->
         <div class="form-group">
-          <!-- <label for="postcode">Enter Postcode</label> -->
+          <label for="postcode">Enter Postcode: </label>
           <input type="text" name="postcode" class="form-control" id="postcode-box" placeholder="Enter postcode..." style="max-width: 500px;" autofocus required value="" required >
-          <button type="submit" class="btn btn-default">Submit</button>
+          <!-- <button type="submit" class="btn btn-default">Submit</button> -->
         </div>
+        <!-- To do, add 'Error...' comment -->
+        <div class="container" style="color:red;"> 
+          <!-- <h2>
+            Error...
+          </h2> -->
+
+          {{error_statement}}
+
+        </div>
+
+        <br>
+        <div class="form-group">
+          <!-- <label for="postcode">Enter the origin and destination cities: </label> -->
+          <label for="postcode">Enter departure city:    </label>
+          <input type="text" name="origin-city" class="form-control" id="origin-city-box" placeholder="From..." autofocus required value="" required > <!-- style="text-indent: 5em;" -->
+        </div>
+        <div class="form-group">
+          <!-- <label for="postcode">Enter the origin and destination cities: </label> -->
+          <label for="postcode">   Enter destination city: </label>
+          <input type="text" name="dest-city" class="form-control" id="dest-city-box" placeholder="To..." autofocus required value="" required >
+        </div>
+        <button type="submit" class="btn btn-default">Submit</button>
+
       </form>
     </div>
   </section>

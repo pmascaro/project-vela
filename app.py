@@ -52,8 +52,23 @@ def get_direction(postcode):
     """
     given a postcode, this function outputs the latitude and longitude
     """
-    postcode_dir = postcode_data[ postcode_data['postcode'] == postcode ].values[0]
-    return '{},{}'.format(postcode_dir[2],postcode_dir[3])
+    # converting to uppercase in case it's postcode inserted in lowercase
+    if postcode.islower() == True:
+        postcode = postcode.upper()
+
+    # slice dataframe, selecing postcode from function parameter
+    mask = postcode_data['postcode'] == postcode
+
+    # getting lat, lon from postcode
+    try: 
+        postcode_dir = postcode_data[ mask ].values[0]
+        return '{},{}'.format(postcode_dir[2],postcode_dir[3])
+
+    except IndexError:
+        return None 
+        
+        # break
+        # print('Postcode not found in database.')
 
 #----
 # getting postcode information for each of the airports
@@ -154,11 +169,12 @@ def home():
     my_url = "https://transit.router.hereapi.com/v8/routes"
 
     # HERE token
-    token = "eyJhbGciOiJSUzUxMiIsImN0eSI6IkpXVCIsImlzcyI6IkhFUkUiLCJhaWQiOiJlMWVaQXRheTZaZFdBdU9vZmt1RSIsImlhdCI6MTY3MTkzMjk1OCwiZXhwIjoxNjcyMDE5MzU4LCJraWQiOiJqMSJ9.ZXlKaGJHY2lPaUprYVhJaUxDSmxibU1pT2lKQk1qVTJRMEpETFVoVE5URXlJbjAuLkdfYjhidG12WWYxMXNSTDQ4cFB2eFEuQ083QWh1T0ZGdDJrMjk0WDJvZDVKSWtoVWt0akJMaVg0N1V3MUtXWnBva29icTExY1NSbWpDcVp4TEJTazh3Y1VuM0VIbkRmTkxBckRiVGRPOHJrNnpOYThVSGE1c2UxX0dsblItUjE5d1FaQ2lyNk1rZzFPZEJCSTJZVXRKdVlMVTJYLVR1RDVuTThMV2I4REswZEw0cVpYaHZHUkk2Y0dwLXlkbzk4azlzLm9PNHZLaVZ4czNDbkpmZU1oU0Z1NHFXRHpCZDJaYVNVM2czSmhFWGhqaE0.ev9z_H0JvwVSwwXu-W7IGMxMnS3QDuLzleIzNRi0EbOB5tOf0FPKeTxp8OA72JFYfOGL2ffRx9CJ5UZOxUJnZ1AFRm2D0338BDK8hVgIK3bmxA4U-ILnzMLhABAQnxmUF8QQu-f4mjZumuR_DUYC-KA83MwsewiczxjR8X97JYcHRJuQIy2Yp-9SSCo-H3wesU256AmGpaca5uz0YSO2kmWPpmBpHxAFrWFHAOdFfVAOQiBBgHZsQmeNTsAGohemBwUuqqE-5AEhP3ZKeHXQ0SAR_O3M1CwKpmcbn45JE0zWBQXZRFAiMKQMPCCQ0ZnHz3srjCjv9rvCMxXYvCMD2Q"
+    token = "eyJhbGciOiJSUzUxMiIsImN0eSI6IkpXVCIsImlzcyI6IkhFUkUiLCJhaWQiOiJlMWVaQXRheTZaZFdBdU9vZmt1RSIsImlhdCI6MTY3MjA0MzgxOSwiZXhwIjoxNjcyMTMwMjE5LCJraWQiOiJqMSJ9.ZXlKaGJHY2lPaUprYVhJaUxDSmxibU1pT2lKQk1qVTJRMEpETFVoVE5URXlJbjAuLjdBU0xiU0F5dWpKZHhIM0tBTTZDUHcueG05Q3RoRmFRT05CandBZWlkX1o0ZjQ0dE9jRklSWlktVlNrQmRldmctR1NiWTZzejdFSGQzYUR5TEgtVFBKUXJhM2Z2V0ZlbU1ZTHc1VllUd0RsdWRSbk1iTW1WMjRIY2N1OFJZVTRGSHVyU1ctVVoyQy1jdXBEeUR4d1lORm5FU1ZrUkpnQjh4dGRsU3BZbW5OSGx6eWFCNC11blAwQTk2a0VIOVRKMVg0Lk5pTmpQZ0l4UGV5ZnBSeHdiUlg5QTJMb1VwNGV6cEQwZGUxMFV5TUswX0k.MS5-7CGLItdbPv9gdlwpaGGoKyA50FTDToHWiVhJraPrnRnEOQRTdfekA3KbU29g9y3x8S-7mqa2T3oRTQ9621pqPI2mkB7AXLw27_VqhraPRz48d7t7RHoMwL9fiVsfSSNZRMkf1e0I41d3tbdekd2d-2QI1ArlXmdt-dhAeG_netE5WhhzjZJcXp5r9ijGLtp5zzd7p4kqhRTUOgH5vMW_dfUI6oICefe4C3hT6FqWDKkPnMkkxe8Knfr16L7_Qr1jd2oReJrXRriKbZwvtR8lTPq5_bMlTeq6vOszmi2YLqWYVbbMLmbKiHz5LZorISlKxHFy9X9TntQaeNrQ8g"
+
     # headers parameter
     my_headers = {'Authorization' : 'Bearer '+token }
 
-    # errors = [] # initialise empty list to be filled with possible errors from user's input
+    # error_statement = [] # initialise empty list to be filled with possible errors from user's input
     # results = {} # initialise empty dictionary
 
     # initialise an empty list where we will save each of the information texts
@@ -186,8 +202,16 @@ def home():
 
         # setting origin postcode - origin comes from user input box
         origin_postcode = request.form['postcode']
+        
+        # get lat and lon from formated postcode
         origin_latlon=get_direction(origin_postcode)
         
+        # TODO - handle any error to make sure app doesn't break if it for example get direction doesn't work
+        if origin_latlon is None:
+            error_statement = "Please enter a correct postcode. Here is an example: W5 3NH"
+            return render_template('index.html', error_statement=error_statement)
+
+        # printing output of user form
         print(f"origin: {origin_latlon}")
 
         # loop through each destination
